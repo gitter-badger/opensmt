@@ -141,7 +141,7 @@ void LIASolver::markVarAsInt(LVRef v) {
 PTRef LIASolver::getInterpolant(const ipartitions_t & mask, std::map<PTRef, icolor_t> * labels, PartitionManager & pmanager) {
     assert(status == UNSAT);
     assert(labels);
-    LIAInterpolator interpolator(logic, explanation, explanationCoefficients, *labels);
+    LIAInterpolator interpolator(logic, LAExplanations::getLIAExplanation(logic, explanation, explanationCoefficients, *labels));
     auto algorithm = config.getLRAInterpolationAlgorithm();
     if (algorithm == itp_lra_alg_strong) { return interpolator.getFarkasInterpolant(); }
     else if (algorithm == itp_lra_alg_weak) { return interpolator.getDualFarkasInterpolant(); }

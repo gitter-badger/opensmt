@@ -7,20 +7,28 @@
 
 #include "FarkasInterpolator.h"
 
+struct LAExplanations {
+    vec<PtAsgn> explanations;
+    std::vector<opensmt::Real> coeffs;
+    std::map<PTRef, icolor_t> labels;
+
+    static LAExplanations getLIAExplanation(LALogic & logic, vec<PtAsgn> const & explanations,
+                                             std::vector<opensmt::Real> const & coeffs,
+                                             std::map<PTRef, icolor_t> const & labels);
+};
+
 class LIAInterpolator {
 
-    std::unique_ptr<FarkasInterpolator> farkasInterpolator;
+    FarkasInterpolator farkasInterpolator;
 
 public:
-    LIAInterpolator(LALogic & logic, vec<PtAsgn> const & explanations, std::vector<opensmt::Real> const & coeffs,
-    std::map<PTRef, icolor_t> & labels);
+    LIAInterpolator(LALogic & logic, LAExplanations liaExplanations);
 
-
-    PTRef getFarkasInterpolant() { return farkasInterpolator->getFarkasInterpolant(); }
-    PTRef getDualFarkasInterpolant() { return farkasInterpolator->getDualFarkasInterpolant(); }
-    PTRef getFlexibleInterpolant(opensmt::Real alpha) { return farkasInterpolator->getFlexibleInterpolant(std::move(alpha)); }
-    PTRef getDecomposedInterpolant() { return farkasInterpolator->getDecomposedInterpolant(); }
-    PTRef getDualDecomposedInterpolant() { return farkasInterpolator->getDualFarkasInterpolant(); }
+    PTRef getFarkasInterpolant() { return farkasInterpolator.getFarkasInterpolant(); }
+    PTRef getDualFarkasInterpolant() { return farkasInterpolator.getDualFarkasInterpolant(); }
+    PTRef getFlexibleInterpolant(opensmt::Real alpha) { return farkasInterpolator.getFlexibleInterpolant(std::move(alpha)); }
+    PTRef getDecomposedInterpolant() { return farkasInterpolator.getDecomposedInterpolant(); }
+    PTRef getDualDecomposedInterpolant() { return farkasInterpolator.getDualFarkasInterpolant(); }
 };
 
 

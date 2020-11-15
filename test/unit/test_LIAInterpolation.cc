@@ -40,7 +40,7 @@ TEST_F(LIAInterpolationTest, test_InterpolationLRASat){
     vec<PtAsgn> conflict {PtAsgn(logic.mkNot(leq1), l_False), PtAsgn(logic.mkNot(leq2), l_False)};
     ASSERT_TRUE(std::all_of(conflict.begin(), conflict.end(), [this](PtAsgn p) { return not logic.isNot(p.tr); }));
     std::map<PTRef, icolor_t> labels {{conflict[0].tr, I_A}, {conflict[1].tr, I_B}};
-    LIAInterpolator interpolator(logic, conflict, {1,1}, labels);
+    LIAInterpolator interpolator(logic, LAExplanations::getLIAExplanation(logic, conflict, {1,1}, labels));
     PTRef farkasItp = interpolator.getFarkasInterpolant();
     std::cout << logic.printTerm(farkasItp) << std::endl;
     EXPECT_TRUE(verifyInterpolant(leq1, leq2, farkasItp));
@@ -77,7 +77,7 @@ TEST_F(LIAInterpolationTest, test_DecompositionInLIA){
     ASSERT_TRUE(std::all_of(conflict.begin(), conflict.end(), [this](PtAsgn p) { return not logic.isNot(p.tr); }));
     std::map<PTRef, icolor_t> labels {{conflict[0].tr, I_A}, {conflict[1].tr, I_A}, {conflict[2].tr, I_A},
                                       {conflict[3].tr, I_B}, {conflict[4].tr, I_B}, {conflict[5].tr, I_B}};
-    LIAInterpolator interpolator(logic, std::move(conflict), {2,1,1,1,1,2}, labels);
+    LIAInterpolator interpolator(logic, LAExplanations::getLIAExplanation(logic, std::move(conflict), {2,1,1,1,1,2}, labels));
     PTRef decomposedFarkasItp = interpolator.getDecomposedInterpolant();
     EXPECT_TRUE(verifyInterpolant(logic.mkAnd({leq1, leq2, leq3}), logic.mkAnd({leq4, leq5, leq6}), decomposedFarkasItp));
     std::cout << logic.printTerm(decomposedFarkasItp) << std::endl;
